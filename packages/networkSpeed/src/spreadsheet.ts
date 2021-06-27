@@ -31,7 +31,7 @@ export async function insertNetworkSpeed(
   const sheet = doc.sheetsByTitle[sheetTitle];
   await sheet.setHeaderRow(["createdAt", "download/mbps", "upload/mbps"]);
   await sheet.addRow(
-    [format(new Date(), "yyyy-MM-dd HH:mm:ss"), downloadSpeed, uploadSpeed],
+    [format(new Date(), "yyyy/MM/dd HH:mm:ss"), downloadSpeed, uploadSpeed],
     {
       raw: true,
       insert: true,
