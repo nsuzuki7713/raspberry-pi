@@ -1,21 +1,18 @@
 import NetworkSpeed from "network-speed";
 
-getNetworkDownloadSpeed().catch((e) => console.log(e));
-
-async function getNetworkDownloadSpeed() {
+export async function getNetworkDownloadSpeed(): Promise<string> {
   const baseUrl = "https://eu.httpbin.org/stream-bytes/500000";
   const fileSizeInBytes = 16000000;
   const testNetworkSpeed = new NetworkSpeed();
-  const speed = await testNetworkSpeed.checkDownloadSpeed(
+  const res = await testNetworkSpeed.checkDownloadSpeed(
     baseUrl,
     fileSizeInBytes
   );
-  console.log("download", speed);
+
+  return res.mbps;
 }
 
-getNetworkUploadSpeed().catch((e) => console.log(e));
-
-async function getNetworkUploadSpeed() {
+export async function getNetworkUploadSpeed(): Promise<string> {
   const options = {
     hostname: "www.google.com",
     port: 80,
@@ -27,9 +24,7 @@ async function getNetworkUploadSpeed() {
   };
   const fileSizeInBytes = 2000000;
   const testNetworkSpeed = new NetworkSpeed();
-  const speed = await testNetworkSpeed.checkUploadSpeed(
-    options,
-    fileSizeInBytes
-  );
-  console.log("upload", speed);
+  const res = await testNetworkSpeed.checkUploadSpeed(options, fileSizeInBytes);
+
+  return res.mbps;
 }

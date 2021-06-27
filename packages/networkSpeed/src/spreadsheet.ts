@@ -1,8 +1,7 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import credentials from "../credentials.json";
 import dotenv from "dotenv";
-
-insertNetworkSpeed().catch((e) => console.log(e));
+import { format } from "date-fns";
 
 function getConfig() {
   dotenv.config();
@@ -19,7 +18,10 @@ function getConfig() {
   };
 }
 
-async function insertNetworkSpeed() {
+export async function insertNetworkSpeed(
+  downloadSpeed: string,
+  uploadSpeed: string
+): Promise<void> {
   const { sheetId, sheetTitle } = getConfig();
   const doc = new GoogleSpreadsheet(sheetId);
 
@@ -27,11 +29,12 @@ async function insertNetworkSpeed() {
   await doc.loadInfo();
 
   const sheet = doc.sheetsByTitle[sheetTitle];
-  console.log(sheet.title);
-  await sheet.setHeaderRow(["createdAt", "mbps"]);
-
-  await sheet.addRow([new Date().toISOString(), "12"], {
-    raw: true,
-    insert: true,
-  });
+  await sheet.setHeaderRow(["createdAt", "download/mbps", "upload/mbps"]);
+  await sheet.addRow(
+    [format(new Date(), "yyyy-MM-dd HH:mm:ss"), downloadSpeed, uploadSpeed],
+    {
+      raw: true,
+      insert: true,
+    }
+  );
 }
